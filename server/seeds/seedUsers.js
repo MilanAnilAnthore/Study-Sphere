@@ -40,7 +40,7 @@ const seedUsers = async () => {
             {
                 name: 'Milan',
                 age: 21,
-                yearOfStudy: 3,
+                year: 3,
                 sex: 'Male',
                 college: findCollege('York University')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -49,7 +49,7 @@ const seedUsers = async () => {
             {
                 name: 'Alex',
                 age: 22,
-                yearOfStudy: 4,
+                year: 4,
                 sex: 'Male',
                 college: findCollege('York University')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -58,7 +58,7 @@ const seedUsers = async () => {
             {
                 name: 'Sara',
                 age: 20,
-                yearOfStudy: 2,
+                year: 2,
                 sex: 'Female',
                 college: findCollege('University of Toronto')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -67,7 +67,7 @@ const seedUsers = async () => {
             {
                 name: 'John',
                 age: 23,
-                yearOfStudy: 4,
+                year: 4,
                 sex: 'Male',
                 college: findCollege('York University')._id,
                 faculty: findFaculty('Engineering and Applied Sciences')._id,
@@ -76,7 +76,7 @@ const seedUsers = async () => {
             {
                 name: 'Emma',
                 age: 21,
-                yearOfStudy: 3,
+                year: 3,
                 sex: 'Female',
                 college: findCollege('York University')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -85,7 +85,7 @@ const seedUsers = async () => {
             {
                 name: 'Olivia',
                 age: 22,
-                yearOfStudy: 3,
+                year: 3,
                 sex: 'Female',
                 college: findCollege('University of Toronto')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -94,7 +94,7 @@ const seedUsers = async () => {
             {
                 name: 'Liam',
                 age: 20,
-                yearOfStudy: 2,
+                year: 2,
                 sex: 'Male',
                 college: findCollege('University of Waterloo')._id,
                 faculty: findFaculty('Engineering and Applied Sciences')._id,
@@ -103,7 +103,7 @@ const seedUsers = async () => {
             {
                 name: 'Sophia',
                 age: 21,
-                yearOfStudy: 3,
+                year: 3,
                 sex: 'Female',
                 college: findCollege('McGill University')._id,
                 faculty: findFaculty('Business, Management, and Commerce')._id,
@@ -112,7 +112,7 @@ const seedUsers = async () => {
             {
                 name: 'Noah',
                 age: 22,
-                yearOfStudy: 4,
+                year: 4,
                 sex: 'Male',
                 college: findCollege('University of British Columbia')._id,
                 faculty: findFaculty('Data, Math, and Physical Sciences')._id,
@@ -121,7 +121,7 @@ const seedUsers = async () => {
             {
                 name: 'Ava',
                 age: 19,
-                yearOfStudy: 1,
+                year: 1,
                 sex: 'Female',
                 college: findCollege('University of Toronto')._id,
                 faculty: findFaculty('Social Sciences and Education')._id,

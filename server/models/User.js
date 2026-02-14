@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number
   },
-  yearOfStudy: {
+  year: {
     type: Number,
     min: 1,
     max: 6  // covers undergrad + masters

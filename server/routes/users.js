@@ -36,7 +36,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 // Register new user
 router.post('/register', asyncHandler(async (req, res) => {
-    const { name, age, yearOfStudy, sex, school, academicArea, major } = req.body;
+    const { name, age, year, sex, school, academicArea, major } = req.body;
 
     // Validate required fields
     if (!name || !school || !academicArea || !major) {
@@ -67,7 +67,7 @@ router.post('/register', asyncHandler(async (req, res) => {
     const newUser = await User.create({
         name,
         age,
-        yearOfStudy,
+        year,
         sex,
         college: college._id,
         faculty: faculty._id,
@@ -85,7 +85,7 @@ router.post('/register', asyncHandler(async (req, res) => {
 
 // Update user
 router.put('/:id', asyncHandler(async (req, res) => {
-    const { name, age, yearOfStudy, sex, school, academicArea, major } = req.body;
+    const { name, age, year, sex, school, academicArea, major } = req.body;
 
     // Check if user exists
     const user = await User.findById(req.params.id);
@@ -97,7 +97,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
     const updateData = {};
     if (name) updateData.name = name;
     if (age) updateData.age = age;
-    if (yearOfStudy) updateData.yearOfStudy = yearOfStudy;
+    if (year) updateData.year = year;
     if (sex) updateData.sex = sex;
     if (major) updateData.major = major;
     // Find college and faculty by name if provided
