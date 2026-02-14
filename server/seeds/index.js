@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const connectDB = require('../config/db');
 const seedColleges = require('./seedColleges');
-const seedMajors = require('./seedMajors');
+const seedFaculties = require('./seedFaculties');
 const seedUsers = require('./seedUsers');
 
 const mongoDB_Dev = process.env.MONGODB_URI_DEV;
@@ -13,9 +13,9 @@ const seedAll = async () => {
         await connectDB(mongoDB_Dev);
         console.log('🌱 Starting database seeding...\n');
 
-        // Order matters: colleges and majors must be seeded before users
+        // Order matters: colleges and faculties must be seeded before users
         await seedColleges();
-        await seedMajors();
+        await seedFaculties();
         await seedUsers();
 
         console.log('\n✅ All data seeded successfully!');

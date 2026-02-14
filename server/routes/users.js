@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const College = require('../models/college');
-const Major = require('../models/major');
+const Faculty = require('../models/faculty');
 const ExpressError = require('../utils/ExpressError');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -15,7 +15,7 @@ const asyncHandler = require('../utils/asyncHandler');
 router.get('/', asyncHandler(async (req, res) => {
     const users = await User.find()
         .populate('college', 'name city country')
-        .populate('major', 'name');
+        .populate('faculty', 'name majors');
     res.json(users);
 }));
 
@@ -24,7 +24,7 @@ router.get('/', asyncHandler(async (req, res) => {
 router.get('/:id', asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id)
         .populate('college')
-        .populate('major');
+        .populate('faculty');
 
     if (!user) {
         throw new ExpressError('User not found', { status: 404, code: 'USER_NOT_FOUND' });
@@ -36,30 +36,30 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 // Register new user
 router.post('/register', asyncHandler(async (req, res) => {
-    const { name, age, yearOfStudy, sex, collegeName, majorName, specialization } = req.body;
+    const { name, age, yearOfStudy, sex, school, academicArea, major } = req.body;
 
     // Validate required fields
-    if (!name || !collegeName || !majorName || !specialization) {
-        throw new ExpressError('Name, college, major, and specialization are required', {
+    if (!name || !school || !academicArea || !major) {
+        throw new ExpressError('Name, school, academic area, and major are required', {
             status: 400,
             code: 'VALIDATION_ERROR'
         });
     }
 
     // Find college and major by name
-    const college = await College.findOne({ name: collegeName });
-    const major = await Major.findOne({ name: majorName });
+    const college = await College.findOne({ name: school });
+    const faculty = await Faculty.findOne({ name: academicArea });
 
     if (!college) {
-        throw new ExpressError(`College '${collegeName}' not found`, {
+        throw new ExpressError(`College '${school}' not found`, {
             status: 404,
             code: 'COLLEGE_NOT_FOUND'
         });
     }
-    if (!major) {
-        throw new ExpressError(`Major '${majorName}' not found`, {
+    if (!faculty) {
+        throw new ExpressError(`Faculty '${academicArea}' not found`, {
             status: 404,
-            code: 'MAJOR_NOT_FOUND'
+            code: 'FACULTY_NOT_FOUND'
         });
     }
 
@@ -70,14 +70,14 @@ router.post('/register', asyncHandler(async (req, res) => {
         yearOfStudy,
         sex,
         college: college._id,
-        major: major._id,
-        specialization
+        faculty: faculty._id,
+        major: major  // this is now a string, not an ObjectId
     });
 
     // Return with populated references
     const populatedUser = await User.findById(newUser._id)
         .populate('college')
-        .populate('major');
+        .populate('faculty');
 
     res.status(201).json(populatedUser);
 }));
@@ -85,7 +85,7 @@ router.post('/register', asyncHandler(async (req, res) => {
 
 // Update user
 router.put('/:id', asyncHandler(async (req, res) => {
-    const { name, age, yearOfStudy, sex, collegeName, majorName, specialization } = req.body;
+    const { name, age, yearOfStudy, sex, school, academicArea, major } = req.body;
 
     // Check if user exists
     const user = await User.findById(req.params.id);
@@ -99,13 +99,12 @@ router.put('/:id', asyncHandler(async (req, res) => {
     if (age) updateData.age = age;
     if (yearOfStudy) updateData.yearOfStudy = yearOfStudy;
     if (sex) updateData.sex = sex;
-    if (specialization) updateData.specialization = specialization;
-
-    // Find college and major by name if provided
-    if (collegeName) {
-        const college = await College.findOne({ name: collegeName });
+    if (major) updateData.major = major;
+    // Find college and faculty by name if provided
+    if (school) {
+        const college = await College.findOne({ name: school });
         if (!college) {
-            throw new ExpressError(`College '${collegeName}' not found`, {
+            throw new ExpressError(`College '${school}' not found`, {
                 status: 404,
                 code: 'COLLEGE_NOT_FOUND'
             });
@@ -113,15 +112,15 @@ router.put('/:id', asyncHandler(async (req, res) => {
         updateData.college = college._id;
     }
 
-    if (majorName) {
-        const major = await Major.findOne({ name: majorName });
-        if (!major) {
-            throw new ExpressError(`Major '${majorName}' not found`, {
+    if (academicArea) {
+        const faculty = await Faculty.findOne({ name: academicArea });
+        if (!faculty) {
+            throw new ExpressError(`Faculty '${academicArea}' not found`, {
                 status: 404,
-                code: 'MAJOR_NOT_FOUND'
+                code: 'FACULTY_NOT_FOUND'
             });
         }
-        updateData.major = major._id;
+        updateData.faculty = faculty._id;
     }
 
     // Update user with new data
@@ -131,7 +130,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
         { new: true, runValidators: true }
     )
         .populate('college')
-        .populate('major');
+        .populate('faculty');
 
     res.json(updatedUser);
 }));
