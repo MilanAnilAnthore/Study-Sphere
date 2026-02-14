@@ -1,2 +1,2 @@
 # Study-Sphere
-CTRL-HACK-DEL Project
+CTRL-HACK-DEL 2.0 Project
