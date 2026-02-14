@@ -10,12 +10,10 @@ const mongoDB_Prod = process.env.MONGODB_URI;
 const mongoDB_Dev = process.env.MONGODB_URI_DEV;
 const methodOverride = require('method-override');
 
-
 // Import route modules
 const collegeRoutes = require('./routes/colleges');
 const facultyRoutes = require('./routes/faculties');
 const userRoutes = require('./routes/users');
-
 
 connectDB(mongoDB_Dev);
 
