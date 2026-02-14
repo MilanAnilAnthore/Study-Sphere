@@ -31,8 +31,8 @@ const seedUsers = async () => {
                 yearOfStudy: 3,
                 sex: 'M',
                 college: findCollege('York University')._id,
-                major: findMajor('Computer Science')._id,
-                specialization: 'Software Development'
+                major: findMajor('Data, Math, and Physical Sciences')._id,
+                specialization: 'Computer Science'
             },
             {
                 name: 'Alex',
@@ -40,8 +40,8 @@ const seedUsers = async () => {
                 yearOfStudy: 4,
                 sex: 'M',
                 college: findCollege('York University')._id,
-                major: findMajor('Computer Science')._id,
-                specialization: 'Artificial Intelligence'
+                major: findMajor('Data, Math, and Physical Sciences')._id,
+                specialization: 'Computer Science'
             },
             {
                 name: 'Sara',
@@ -49,8 +49,8 @@ const seedUsers = async () => {
                 yearOfStudy: 2,
                 sex: 'F',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Mathematics')._id,
-                specialization: 'Applied Mathematics'
+                major: findMajor('Data, Math, and Physical Sciences')._id,
+                specialization: 'Mathematics'
             },
             {
                 name: 'John',
@@ -58,8 +58,8 @@ const seedUsers = async () => {
                 yearOfStudy: 4,
                 sex: 'M',
                 college: findCollege('York University')._id,
-                major: findMajor('Mechanical Engineering')._id,
-                specialization: 'Robotics'
+                major: findMajor('Engineering and Applied Sciences')._id,
+                specialization: 'Mechanical Engineering'
             },
             {
                 name: 'Emma',
@@ -67,8 +67,8 @@ const seedUsers = async () => {
                 yearOfStudy: 3,
                 sex: 'F',
                 college: findCollege('York University')._id,
-                major: findMajor('Computer Science')._id,
-                specialization: 'Cybersecurity'
+                major: findMajor('Data, Math, and Physical Sciences')._id,
+                specialization: 'Computer Science'
             },
             {
                 name: 'Olivia',
@@ -76,7 +76,7 @@ const seedUsers = async () => {
                 yearOfStudy: 3,
                 sex: 'F',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Mathematics')._id,
+                major: findMajor('Data, Math, and Physical Sciences')._id,
                 specialization: 'Statistics'
             },
             {
@@ -85,8 +85,8 @@ const seedUsers = async () => {
                 yearOfStudy: 2,
                 sex: 'M',
                 college: findCollege('University of Waterloo')._id,
-                major: findMajor('Software Engineering')._id,
-                specialization: 'Web Development'
+                major: findMajor('Engineering and Applied Sciences')._id,
+                specialization: 'Software Engineering'
             },
             {
                 name: 'Sophia',
@@ -94,8 +94,8 @@ const seedUsers = async () => {
                 yearOfStudy: 3,
                 sex: 'F',
                 college: findCollege('McGill University')._id,
-                major: findMajor('Business Administration')._id,
-                specialization: 'Entrepreneurship'
+                major: findMajor('Business, Management, and Commerce')._id,
+                specialization: 'Business Administration'
             },
             {
                 name: 'Noah',
@@ -103,8 +103,8 @@ const seedUsers = async () => {
                 yearOfStudy: 4,
                 sex: 'M',
                 college: findCollege('University of British Columbia')._id,
-                major: findMajor('Data Science')._id,
-                specialization: 'Machine Learning'
+                major: findMajor('Data, Math, and Physical Sciences')._id,
+                specialization: 'Data Science'
             },
             {
                 name: 'Ava',
@@ -112,8 +112,8 @@ const seedUsers = async () => {
                 yearOfStudy: 1,
                 sex: 'F',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Psychology')._id,
-                specialization: 'Clinical Psychology'
+                major: findMajor('Social Sciences and Education')._id,
+                specialization: 'Psychology'
             }
         ];
 
