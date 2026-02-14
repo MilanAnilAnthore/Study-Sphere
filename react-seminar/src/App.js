@@ -1,7 +1,7 @@
-import React, { useState, useEffect }from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
  
-const academicAreas = [
+const faculties = [
   "Business, Management, and Commerce",
   "Engineering and Applied Sciences",
   "Health and Life Sciences",
@@ -24,20 +24,20 @@ function App() {
   const [formData, setFormData] = useState({
     name: "",
     year: "",
-    sex: "Not specified",
+    sex: "Prefer not to say",
     major: "",
-    school: "",
-    academicArea: ""
+    college: "",
+    faculty: ""
   });
 
   const [majors, setMajors] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch majors when academic area changes
+  // Fetch majors when faculty changes
   useEffect(() => {
-    if (formData.academicArea) {
+    if (formData.faculty) {
       setLoading(true);
-      fetch(`http://localhost:5000/majors?area=${encodeURIComponent(formData.academicArea)}`)
+      fetch(`http://localhost:5000/majors?faculty=${encodeURIComponent(formData.faculty)}`)
         .then(res => res.json())
         .then(data => {
           setMajors(data);
@@ -50,16 +50,16 @@ function App() {
     } else {
       setMajors([]);
     }
-  }, [formData.academicArea]);
+  }, [formData.faculty]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
  
-    if (name === "academicArea") {
+    if (name === "faculty") {
       setFormData({
         ...formData,
         [name]: value,
-        major: "" // Clear major when area changes
+        major: "" // Clear major when faculty changes
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -75,13 +75,11 @@ function App() {
       body: JSON.stringify(formData),
     });
  
-    const data = await response.json();  // Get response from backend
+    const data = await response.json();
 
     if (response.ok) {
-      // Success (status 200-299)
       alert("User registered successfully!");
     } else {
-      // Error (status 400+)
       alert(`Error: ${data.message}`);
     }
   };
@@ -94,11 +92,17 @@ function App() {
         <input name="name" placeholder="Full Name" onChange={handleChange} required />
  
         <div style={{ display: 'flex', gap: '10px' }}>
-          <input name="age" placeholder="Age" type="number" onChange={handleChange} style={{ flex: 1 }} />
+          <select name="year" value={formData.year} onChange={handleChange} style={{ flex: 1 }}>
+            <option value="1st">1st</option>
+            <option value="2nd">2nd</option>
+            <option value="3rd">3rd</option>
+            <option value="4th">4th</option>
+            <option value="5th+">5th+</option>
+          </select>
           <select name="sex" value={formData.sex} onChange={handleChange} style={{ flex: 1 }}>
             <option value="M">Male</option>
             <option value="F">Female</option>
-            <option value="Not specified">Other/Private</option>
+            <option value="Prefer not to say">Prefer not to say</option>
           </select>
         </div>
  
@@ -108,17 +112,17 @@ function App() {
           {schools.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
  
-        <label>Academic Area</label>
-        <select name="academicArea" value={formData.academicArea} onChange={handleChange} required>
-          <option value="">Select an Area</option>
-          {academicAreas.map(area => (
-            <option key={area} value={area}>{area}</option>
+        <label>Faculty</label>
+        <select name="faculty" value={formData.faculty} onChange={handleChange} required>
+          <option value="">Select a Faculty</option>
+          {faculties.map(faculty => (
+            <option key={faculty} value={faculty}>{faculty}</option>
           ))}
         </select>
  
-        {formData.academicArea && (
+        {formData.faculty && (
           <>
-            <label>Specific Major</label>
+            <label>Major</label>
             <select name="major" value={formData.major} onChange={handleChange} required disabled={loading}>
               <option value="">{loading ? "Loading majors..." : "Select Major"}</option>
               {majors.map(m => (
