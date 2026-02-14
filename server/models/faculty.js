@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const majorSchema = new mongoose.Schema({
+const facultySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         unique: true
     },
-    specializations: [{
+    majors: [{
         type: String
     }],
     createdAt: {
@@ -15,4 +15,4 @@ const majorSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Major', majorSchema);
+module.exports = mongoose.model('Faculty', facultySchema);

@@ -13,7 +13,7 @@ const methodOverride = require('method-override');
 
 // Import route modules
 const collegeRoutes = require('./routes/colleges');
-const majorRoutes = require('./routes/majors');
+const facultyRoutes = require('./routes/faculties');
 const userRoutes = require('./routes/users');
 
 
@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 
 // Mount routes
 app.use('/api/colleges', collegeRoutes);
-app.use('/api/majors', majorRoutes);
+app.use('/api/faculties', facultyRoutes);
 app.use('/api/users', userRoutes);
 
 

@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const College = require('../models/college');
-const Major = require('../models/major');
+const Faculty = require('../models/faculty');
 
 const seedUsers = async () => {
     try {
         // Fetch all colleges and majors from database
         const colleges = await College.find();
-        const majors = await Major.find();
+        const faculties = await Faculty.find();
 
-        if (colleges.length === 0 || majors.length === 0) {
-            console.log('⚠️  Please seed colleges and majors first!');
+        if (colleges.length === 0 || faculties.length === 0) {
+            console.log('⚠️  Please seed colleges and faculties first!');
             return;
         }
 
@@ -18,102 +18,114 @@ const seedUsers = async () => {
         const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
         // Helper function to find college by name
-        const findCollege = (name) => colleges.find(c => c.name === name);
+        const findCollege = (name) => {
+            const college = colleges.find(c => c.name === name);
+            if (!college) {
+                throw new Error(`College '${name}' not found in database`);
+            }
+            return college;
+        };
 
-        // Helper function to find major by name
-        const findMajor = (name) => majors.find(m => m.name === name);
+        // Helper function to find faculty by name
+        const findFaculty = (name) => {
+            const faculty = faculties.find(f => f.name === name);
+            if (!faculty) {
+                throw new Error(`Faculty '${name}' not found in database`);
+            }
+            return faculty;
+        };
 
         // Create users with proper references
         const users = [
             {
                 name: 'Milan',
                 age: 21,
-                yearOfStudy: 3,
-                sex: 'M',
+                year: 3,
+                sex: 'Male',
                 college: findCollege('York University')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Computer Science'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Computer Science'
             },
             {
                 name: 'Alex',
                 age: 22,
-                yearOfStudy: 4,
-                sex: 'M',
+                year: 4,
+                sex: 'Male',
                 college: findCollege('York University')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Computer Science'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Computer Science'
             },
             {
                 name: 'Sara',
                 age: 20,
-                yearOfStudy: 2,
-                sex: 'F',
+                year: 2,
+                sex: 'Female',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Mathematics'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Mathematics'
             },
             {
                 name: 'John',
                 age: 23,
-                yearOfStudy: 4,
-                sex: 'M',
+                year: 4,
+                sex: 'Male',
                 college: findCollege('York University')._id,
-                major: findMajor('Engineering and Applied Sciences')._id,
-                specialization: 'Mechanical Engineering'
+                faculty: findFaculty('Engineering and Applied Sciences')._id,
+                major: 'Mechanical Engineering'
             },
             {
                 name: 'Emma',
                 age: 21,
-                yearOfStudy: 3,
-                sex: 'F',
+                year: 3,
+                sex: 'Female',
                 college: findCollege('York University')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Computer Science'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Computer Science'
             },
             {
                 name: 'Olivia',
                 age: 22,
-                yearOfStudy: 3,
-                sex: 'F',
+                year: 3,
+                sex: 'Female',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Statistics'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Statistics'
             },
             {
                 name: 'Liam',
                 age: 20,
-                yearOfStudy: 2,
-                sex: 'M',
+                year: 2,
+                sex: 'Male',
                 college: findCollege('University of Waterloo')._id,
-                major: findMajor('Engineering and Applied Sciences')._id,
-                specialization: 'Software Engineering'
+                faculty: findFaculty('Engineering and Applied Sciences')._id,
+                major: 'Software Engineering'
             },
             {
                 name: 'Sophia',
                 age: 21,
-                yearOfStudy: 3,
-                sex: 'F',
+                year: 3,
+                sex: 'Female',
                 college: findCollege('McGill University')._id,
-                major: findMajor('Business, Management, and Commerce')._id,
-                specialization: 'Business Administration'
+                faculty: findFaculty('Business, Management, and Commerce')._id,
+                major: 'Business Administration'
             },
             {
                 name: 'Noah',
                 age: 22,
-                yearOfStudy: 4,
-                sex: 'M',
+                year: 4,
+                sex: 'Male',
                 college: findCollege('University of British Columbia')._id,
-                major: findMajor('Data, Math, and Physical Sciences')._id,
-                specialization: 'Data Science'
+                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                major: 'Data Science'
             },
             {
                 name: 'Ava',
                 age: 19,
-                yearOfStudy: 1,
-                sex: 'F',
+                year: 1,
+                sex: 'Female',
                 college: findCollege('University of Toronto')._id,
-                major: findMajor('Social Sciences and Education')._id,
-                specialization: 'Psychology'
+                faculty: findFaculty('Social Sciences and Education')._id,
+                major: 'Psychology'
             }
         ];
 
