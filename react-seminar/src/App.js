@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect }from 'react';
 import './App.css';
  
+const academicAreas = [
+  "Business, Management, and Commerce",
+  "Engineering and Applied Sciences",
+  "Health and Life Sciences",
+  "Data, Math, and Physical Sciences",
+  "Social Sciences and Education",
+  "Humanities, Arts, and Law"
+];
+
 const schools = [
   "Carleton University", "Concordia University", "Dalhousie University", 
   "McGill University", "McMaster University", "Memorial University", 
@@ -11,50 +20,46 @@ const schools = [
   "University of Waterloo", "Western University", "York University"
 ].sort();
  
-const academicAreas = {
-  "Business, Management, and Commerce": [
-    "Accounting", "Business Administration", "Commerce", "Finance", "Management", "Marketing"
-  ],
-  "Engineering and Applied Sciences": [
-    "Chemical Engineering", "Civil Engineering", "Computer Engineering", 
-    "Electrical Engineering", "Mechanical Engineering", "Software Engineering"
-  ],
-  "Health and Life Sciences": [
-    "Biochemistry", "Biology", "Health Sciences", "Kinesiology", "Nursing"
-  ],
-  "Data, Math, and Physical Sciences": [
-    "Chemistry", "Computer Science", "Data Science", "Mathematics", "Physics", "Statistics"
-  ],
-  "Social Sciences and Education": [
-    "Economics", "Education", "Political Science", "Psychology", "Sociology"
-  ],
-  "Humanities, Arts, and Law": [
-    "Architecture", "English Literature", "Fine Arts", "History", "Law", "Philosophy"
-  ]
-};
 function App() {
- 
-  // Create a state to track what the user is typing
-  // const [input, setInput] = useState("");
-  // Create a state to hold the to-do
   const [formData, setFormData] = useState({
     name: "",
     year: "",
     sex: "Not specified",
     major: "",
     school: "",
- 
+    academicArea: ""
   });
-// 2. A single function to handle ALL input changes
+
+  const [majors, setMajors] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch majors when academic area changes
+  useEffect(() => {
+    if (formData.academicArea) {
+      setLoading(true);
+      fetch(`http://localhost:5000/majors?area=${encodeURIComponent(formData.academicArea)}`)
+        .then(res => res.json())
+        .then(data => {
+          setMajors(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error("Error fetching majors:", err);
+          setLoading(false);
+        });
+    } else {
+      setMajors([]);
+    }
+  }, [formData.academicArea]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
  
     if (name === "academicArea") {
-      // When the Area changes, we MUST clear the Major
       setFormData({
         ...formData,
         [name]: value,
-        major: "" // <--- This is the key change
+        major: "" // Clear major when area changes
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -62,21 +67,27 @@ function App() {
   };
  
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevents the page from refreshing
+    e.preventDefault();
  
-    const response = await fetch('http://localhost:3000', {
+    const response = await fetch('http://localhost:5000/api/users/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData), // Sends the whole object at once
+      body: JSON.stringify(formData),
     });
  
+    const data = await response.json();  // Get response from backend
+
     if (response.ok) {
-      alert("Entry Submitted!");
+      // Success (status 200-299)
+      alert("User registered successfully!");
+    } else {
+      // Error (status 400+)
+      alert(`Error: ${data.message}`);
     }
   };
  
   return (
-<div className="App">
+    <div className="App">
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '450px', margin: 'auto', padding: '30px' }}>
         <h2>Find a Study Buddy</h2>
  
@@ -97,22 +108,20 @@ function App() {
           {schools.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
  
-        {/* --- FIRST DROPDOWN: Academic Area --- */}
         <label>Academic Area</label>
         <select name="academicArea" value={formData.academicArea} onChange={handleChange} required>
           <option value="">Select an Area</option>
-          {Object.keys(academicAreas).map(area => (
+          {academicAreas.map(area => (
             <option key={area} value={area}>{area}</option>
           ))}
         </select>
  
-        {/* --- SECOND DROPDOWN: Specific Major (Conditional) --- */}
         {formData.academicArea && (
           <>
             <label>Specific Major</label>
-            <select name="major" value={formData.major} onChange={handleChange} required>
-              <option value="">Select Major</option>
-              {academicAreas[formData.academicArea].map(m => (
+            <select name="major" value={formData.major} onChange={handleChange} required disabled={loading}>
+              <option value="">{loading ? "Loading majors..." : "Select Major"}</option>
+              {majors.map(m => (
                 <option key={m} value={m}>{m}</option>
               ))}
             </select>
