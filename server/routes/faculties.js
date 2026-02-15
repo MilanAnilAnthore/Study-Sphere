@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Faculty = require('../models/faculty');
 const asyncHandler = require('../utils/asyncHandler');
+const { validateRequest } = require('../middleware/validation');
+const { nameParamSchema } = require('../validation/facultySchemas');
 
 
 
@@ -12,18 +14,21 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 // Get majors for a specific faculty by name
-router.get('/:name/majors', asyncHandler(async (req, res) => {
-    const faculty = await Faculty.findOne({ name: req.params.name });
+router.get('/:name/majors',
+    validateRequest(nameParamSchema, 'params'),  // Add validation
+    asyncHandler(async (req, res) => {
+        const faculty = await Faculty.findOne({ name: req.params.name });
 
-    if (!faculty) {
-        const ExpressError = require('../utils/ExpressError');
-        throw new ExpressError('Faculty not found', {
-            status: 404,
-            code: 'FACULTY_NOT_FOUND'
-        });
-    }
+        if (!faculty) {
+            const ExpressError = require('../utils/ExpressError');
+            throw new ExpressError('Faculty not found', {
+                status: 404,
+                code: 'FACULTY_NOT_FOUND'
+            });
+        }
 
-    res.json(faculty.majors);
-}));
+        res.json(faculty.majors);
+    })
+);
 
 module.exports = router;

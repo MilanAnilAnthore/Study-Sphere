@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
+const validateEnv = require('./config/validateEnv');
+validateEnv();
 const connectDB = require('./config/db');
 const ExpressError = require('./utils/ExpressError');
 
@@ -17,7 +19,10 @@ const facultyRoutes = require('./routes/faculties');
 const userRoutes = require('./routes/users');
 
 
-connectDB(mongoDB_Dev);
+connectDB(mongoDB_Dev).catch(err => {
+    console.error('Failed to connect to database:', err);
+    process.exit(1);
+});
 
 app.use(cors({
     origin: 'http://localhost:3000'
@@ -46,6 +51,42 @@ app.all(/(.*)/, (req, res, next) => {
     });
 });
 
+// Add this before your current error handler
+app.use((err, req, res, next) => {
+    // Handle Mongoose validation errors
+    if (err.name === 'ValidationError') {
+        const details = Object.values(err.errors).map(e => ({
+            field: e.path,
+            message: e.message
+        }));
+
+        return res.status(400).json({
+            message: 'Validation failed',
+            code: 'MONGOOSE_VALIDATION_ERROR',
+            details
+        });
+    }
+
+    // Handle Mongoose CastError (invalid ObjectId)
+    if (err.name === 'CastError') {
+        return res.status(400).json({
+            message: 'Invalid ID format',
+            code: 'INVALID_ID'
+        });
+    }
+
+    // Handle duplicate key error (MongoDB E11000)
+    if (err.code === 11000) {
+        const field = Object.keys(err.keyPattern)[0];
+        return res.status(409).json({
+            message: `${field} already exists`,
+            code: 'DUPLICATE_KEY',
+            details: { field }
+        });
+    }
+
+    next(err);
+});
 
 
 app.use((err, req, res, next) => {
@@ -54,9 +95,11 @@ app.use((err, req, res, next) => {
 
     res.status(status).json({
         message,
-        code: err.code
-    });
+        code: err.code,
+        ...(err.details && { details: err.details })
+    })
 });
+
 
 
 
