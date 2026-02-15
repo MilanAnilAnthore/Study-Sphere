@@ -68,7 +68,7 @@ router.get('/:id/match', asyncHandler(async (req, res) => {
 
     // Initalize Gemini API
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash", // Use the current 2026 stable version
+        model: "gemini-2.5-flash-lite", // Use the current 2026 stable version
         generationConfig: { responseMimeType: "application/json" }
     });
 
