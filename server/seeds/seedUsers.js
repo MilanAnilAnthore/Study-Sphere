@@ -46,7 +46,7 @@ const seedUsers = async () => {
                 year: 3,
                 sex: 'Male',
                 college: findCollege('York University')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Computer Science'
             },
             {
@@ -66,7 +66,7 @@ const seedUsers = async () => {
                 year: 2,
                 sex: 'Male',
                 college: findCollege('University of Waterloo')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Computer Science'
             },
             {
@@ -76,7 +76,7 @@ const seedUsers = async () => {
                 year: 4,
                 sex: 'Female',
                 college: findCollege('McGill University')._id,
-                faculty: findFaculty('Business, Management, and Commerce')._id,
+                faculty: findFaculty('Business Management and Commerce')._id,
                 major: 'Business Administration'
             },
             {
@@ -86,7 +86,7 @@ const seedUsers = async () => {
                 year: 1,
                 sex: 'Male',
                 college: findCollege('University of British Columbia')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Data Science'
             },
             {
@@ -116,7 +116,7 @@ const seedUsers = async () => {
                 year: 2,
                 sex: 'Female',
                 college: findCollege('University of Waterloo')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Mathematics'
             },
             {
@@ -146,7 +146,7 @@ const seedUsers = async () => {
                 year: 4,
                 sex: 'Male',
                 college: findCollege('Carleton University')._id,
-                faculty: findFaculty('Humanities, Arts, and Law')._id,
+                faculty: findFaculty('Humanities Arts and Law')._id,
                 major: 'Architecture'
             },
             {
@@ -186,7 +186,7 @@ const seedUsers = async () => {
                 year: 3,
                 sex: 'Male',
                 college: findCollege('University of Calgary')._id,
-                faculty: findFaculty('Business, Management, and Commerce')._id,
+                faculty: findFaculty('Business Management and Commerce')._id,
                 major: 'Finance'
             },
             {
@@ -196,7 +196,7 @@ const seedUsers = async () => {
                 year: 4,
                 sex: 'Female',
                 college: findCollege('Simon Fraser University')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Statistics'
             },
             {
@@ -216,7 +216,7 @@ const seedUsers = async () => {
                 year: 1,
                 sex: 'Female',
                 college: findCollege('University of Alberta')._id,
-                faculty: findFaculty('Data, Math, and Physical Sciences')._id,
+                faculty: findFaculty('Data Math and Physical Sciences')._id,
                 major: 'Physics'
             },
             {
@@ -236,7 +236,7 @@ const seedUsers = async () => {
                 year: 3,
                 sex: 'Female',
                 college: findCollege('Concordia University')._id,
-                faculty: findFaculty('Humanities, Arts, and Law')._id,
+                faculty: findFaculty('Humanities Arts and Law')._id,
                 major: 'Fine Arts'
             }
         ];
