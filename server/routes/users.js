@@ -97,11 +97,11 @@ router.get('/:id/match', asyncHandler(async (req, res) => {
 
 // Register new user
 router.post('/register', asyncHandler(async (req, res) => {
-    const { name, age, year, sex, school, academicArea, major } = req.body;
+    const { name, email, age, year, sex, school, academicArea, major } = req.body;
 
     // Validate required fields
-    if (!name || !school || !academicArea || !major) {
-        throw new ExpressError('Name, school, academic area, and major are required', {
+    if (!name || !email || !school || !academicArea || !major) {
+        throw new ExpressError('Name, email, school, academic area, and major are required', {
             status: 400,
             code: 'VALIDATION_ERROR'
         });
@@ -127,6 +127,7 @@ router.post('/register', asyncHandler(async (req, res) => {
     // Create new user
     const newUser = await User.create({
         name,
+        email,
         age,
         year,
         sex,
@@ -146,7 +147,7 @@ router.post('/register', asyncHandler(async (req, res) => {
 
 // Update user
 router.put('/:id', asyncHandler(async (req, res) => {
-    const { name, age, year, sex, school, academicArea, major } = req.body;
+    const { name, email, age, year, sex, school, academicArea, major } = req.body;
 
     // Check if user exists
     const user = await User.findById(req.params.id);
@@ -157,6 +158,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
     // Build update object
     const updateData = {};
     if (name) updateData.name = name;
+    if (email) updateData.email = email;
     if (age) updateData.age = age;
     if (year) updateData.year = year;
     if (sex) updateData.sex = sex;
