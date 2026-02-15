@@ -81,7 +81,7 @@ router.get('/:id/match', asyncHandler(async (req, res) => {
         - College: ${user.college}
         - Major: ${user.major}
         - Specialization: ${user.faculty}
-        - Year: ${user.yearOfStudy}
+        - Year: ${user.year}
 
         Candidates List: ${JSON.stringify(candidates)}
 
