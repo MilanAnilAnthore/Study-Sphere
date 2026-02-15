@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authFetch, removeAuthToken, getAuthToken } from '../config/api';
 import './Dashboard.css';
-
-const API_BASE = 'http://localhost:5000/api';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -16,20 +15,24 @@ function Dashboard() {
   const userName = localStorage.getItem('userName');
 
   useEffect(() => {
-    if (!userId) {
-      navigate('/register');
+    const token = getAuthToken();
+    if (!token || !userId) {
+      navigate('/login');
       return;
     }
 
     // Fetch user data
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${API_BASE}/users/${userId}`);
+        const response = await authFetch(`/users/${userId}`);
         if (response.ok) {
           const data = await response.json();
           setUser(data);
         } else {
           setError('Failed to load user data');
+          if (response.status === 401) {
+            navigate('/login');
+          }
         }
       } catch (err) {
         setError('Network error');
@@ -44,13 +47,13 @@ function Dashboard() {
   const findMatches = async () => {
     setMatchLoading(true);
     setError('');
-    
+
     try {
-      const response = await fetch(`${API_BASE}/users/${userId}/match`);
+      const response = await authFetch(`/users/${userId}/match`);
       const data = await response.json();
-      
+
       if (response.ok) {
-        setMatches(Array.isArray(data) ? data : data.matches || []);
+        setMatches(Array.isArray(data.matches) ? data.matches : []);
       } else {
         setError(data.message || 'Failed to find matches');
       }
@@ -62,8 +65,7 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
+    removeAuthToken();
     navigate('/');
   };
 
@@ -127,7 +129,7 @@ function Dashboard() {
         <section className="matches-section">
           <div className="matches-header">
             <h2>Study Buddy Matches</h2>
-            <button 
+            <button
               className="find-btn"
               onClick={findMatches}
               disabled={matchLoading}

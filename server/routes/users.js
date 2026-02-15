@@ -92,7 +92,7 @@ router.get('/:id/match', asyncHandler(async (req, res) => {
     try {
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
-        res.json(JSON.parse(responseText));
+        res.json({ matches: JSON.parse(responseText) })
     } catch (aiError) {
         throw new ExpressError('AI Matching failed. Please try again later.', {
             status: 503,

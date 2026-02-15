@@ -36,8 +36,6 @@ const seedUsers = async () => {
         };
 
         // Create users with proper references
-        // Create users with proper references
-        // Create users with proper references
         const users = [
             {
                 name: 'Ryan Chen',
