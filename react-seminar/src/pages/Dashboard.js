@@ -161,6 +161,7 @@ function Dashboard() {
                     {match.name?.charAt(0).toUpperCase()}
                   </div>
                   <h3 className="match-name">{match.name}</h3>
+                  <p className="match-email">{match.email}</p>
                   <div className="match-score">
                     <span className="score-value">{match.matchScore}%</span>
                     <span className="score-label">Match</span>
