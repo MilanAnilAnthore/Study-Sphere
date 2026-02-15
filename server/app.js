@@ -12,7 +12,6 @@ const mongoDB_Prod = process.env.MONGODB_URI;
 const mongoDB_Dev = process.env.MONGODB_URI_DEV;
 const methodOverride = require('method-override');
 
-
 // Import route modules
 const collegeRoutes = require('./routes/colleges');
 const facultyRoutes = require('./routes/faculties');
@@ -23,6 +22,7 @@ connectDB(mongoDB_Dev).catch(err => {
     console.error('Failed to connect to database:', err);
     process.exit(1);
 });
+
 
 app.use(cors({
     origin: 'http://localhost:3000'

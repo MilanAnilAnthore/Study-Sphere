@@ -12,6 +12,14 @@ const {
     idParamSchema
 } = require('../validation/userSchemas');
 
+
+// Initialize Google Gemini AI SDK
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// ========== USER ROUTES ==========
+
+
 // Get all users (with populated references)
 router.get('/', asyncHandler(async (req, res) => {
     const users = await User.find()
@@ -34,10 +42,66 @@ router.get('/:id',
                 code: 'USER_NOT_FOUND'
             });
         }
-
         res.json(user);
     })
 );
+
+// Match users togther
+router.get('/:id/match', asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id)
+        .populate('college')
+        .populate('faculty');
+
+    if (!user) {
+        throw new ExpressError('User not found', { status: 404, code: 'USER_NOT_FOUND' });
+    }
+
+    //Find candidates
+    const candidates = await User.find({ _id: { $ne: req.params.id } })
+        .populate('college')
+        .populate('faculty')
+        .limit(15);
+
+    if (candidates.length === 0) {
+        return res.json({ message: "No candidates available for matching.", matches: [] });
+    }
+
+    // Initalize Gemini API
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash", // Use the current 2026 stable version
+        generationConfig: { responseMimeType: "application/json" }
+    });
+
+    // Prompt for Gemini
+    const prompt = `
+        You are a university study buddy matching assistant.
+        Target Student:
+        - Name: ${user.name}
+        - Age: ${user.age}
+        - College: ${user.college}
+        - Major: ${user.major}
+        - Specialization: ${user.faculty}
+        - Year: ${user.yearOfStudy}
+
+        Candidates List: ${JSON.stringify(candidates)}
+
+        Task: Find the top 3 best matches based on academic compatibility.
+        Return ONLY a JSON array of objects with keys: "name", "matchScore" (0-100), and "reason" (one helpful sentence).
+    `;
+
+    try {
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        res.json(JSON.parse(responseText));
+    } catch (aiError) {
+        throw new ExpressError('AI Matching failed. Please try again later.', {
+            status: 503,
+            code: 'AI_SERVICE_ERROR'
+        });
+    }
+}));
+
+
 
 // Register new user
 router.post('/register',
