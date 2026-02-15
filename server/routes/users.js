@@ -92,7 +92,21 @@ router.get('/:id/match', asyncHandler(async (req, res) => {
     try {
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
-        res.json({ matches: JSON.parse(responseText) })
+        const aiMatches = JSON.parse(responseText);
+        
+        // Enrich matches with email addresses by looking up users
+        const enrichedMatches = aiMatches.map(match => {
+            // Find the candidate user by name
+            const candidateUser = candidates.find(c => c.name === match.name);
+            return {
+                name: match.name,
+                email: candidateUser ? candidateUser.email : null,
+                matchScore: match.matchScore,
+                reason: match.reason
+            };
+        });
+        
+        res.json({ matches: enrichedMatches });
     } catch (aiError) {
         throw new ExpressError('AI Matching failed. Please try again later.', {
             status: 503,
