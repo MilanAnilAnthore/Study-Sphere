@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authFetch, setAuthToken } from '../config/api';
+import API_BASE from '../config/api';
 import './RegisterPage.css';
-
-const API_BASE = 'http://localhost:5000/api';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     age: '',
     year: '',
     sex: '',
@@ -33,10 +34,10 @@ function RegisterPage() {
           fetch(`${API_BASE}/colleges`),
           fetch(`${API_BASE}/faculties`)
         ]);
-        
+
         const collegesData = await collegesRes.json();
         const facultiesData = await facultiesRes.json();
-        
+
         setColleges(collegesData);
         setFaculties(facultiesData);
       } catch (err) {
@@ -44,7 +45,7 @@ function RegisterPage() {
         setError('Failed to load form data. Please refresh the page.');
       }
     };
-    
+
     fetchData();
   }, []);
 
@@ -70,7 +71,7 @@ function RegisterPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === 'academicArea') {
       setFormData({
         ...formData,
@@ -80,7 +81,7 @@ function RegisterPage() {
     } else {
       setFormData({ ...formData, [name]: value });
     }
-    
+
     setError('');
   };
 
@@ -90,18 +91,18 @@ function RegisterPage() {
     setError('');
 
     try {
-      const response = await fetch(`${API_BASE}/users/register`, {
+      const response = await authFetch('/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Store user data and navigate to dashboard
-        localStorage.setItem('userId', data._id);
-        localStorage.setItem('userName', data.name);
+        // Store token and user data
+        setAuthToken(data.token);
+        localStorage.setItem('userId', data.user._id);
+        localStorage.setItem('userName', data.user.name);
         navigate('/dashboard');
       } else {
         setError(data.message || 'Registration failed. Please try again.');
@@ -119,7 +120,7 @@ function RegisterPage() {
         <button className="back-btn" onClick={() => navigate('/')}>
           ← Back
         </button>
-        
+
         <h1 className="register-title">Create Account</h1>
         <p className="register-subtitle">Join Study Sphere and find your study partners</p>
 
@@ -149,6 +150,20 @@ function RegisterPage() {
               onChange={handleChange}
               placeholder="Enter your email"
               required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Create a password (min 6 characters)"
+              required
+              minLength="6"
             />
           </div>
 
@@ -260,8 +275,8 @@ function RegisterPage() {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-btn"
             disabled={submitting}
           >

@@ -8,7 +8,6 @@ const connectDB = require('./config/db');
 const ExpressError = require('./utils/ExpressError');
 
 const PORT = process.env.PORT || 5000;
-const mongoDB_Prod = process.env.MONGODB_URI;
 const mongoDB_Dev = process.env.MONGODB_URI_DEV;
 const methodOverride = require('method-override');
 
@@ -16,7 +15,7 @@ const methodOverride = require('method-override');
 const collegeRoutes = require('./routes/colleges');
 const facultyRoutes = require('./routes/faculties');
 const userRoutes = require('./routes/users');
-
+const authRoutes = require('./routes/auth');  // ← ADD THIS LINE
 
 connectDB(mongoDB_Dev).catch(err => {
     console.error('Failed to connect to database:', err);
@@ -41,6 +40,7 @@ app.get('/', (req, res) => {
 app.use('/api/colleges', collegeRoutes);
 app.use('/api/faculties', facultyRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 
 // Handle undefined routes
